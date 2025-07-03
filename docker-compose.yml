@@ -1,0 +1,9 @@
+services:
+  db:
+    image: postgres:17.5
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: price-aggregator
+    ports:
+      - "127.0.0.2:15432:5432"
