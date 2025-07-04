@@ -2,7 +2,7 @@ package com.ekorn.port.websocket
 
 import com.ekorn.configuration.AppProperties
 import com.ekorn.port.websocket.builder.SubscribeRequestBuilder
-import com.fasterxml.jackson.databind.JsonNode
+import com.ekorn.port.websocket.model.EventResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
@@ -57,7 +57,7 @@ class WebSocketClient(
     suspend fun consume(session: DefaultClientWebSocketSession) {
         while (true) {
             try {
-                val message = session.receiveDeserialized<JsonNode>()
+                val message = session.receiveDeserialized<EventResponse>()
                 logger.info { "Received event: $message" }
             } catch (_: CancellationException) {
                 logger.info { "Shutting down WebSocket consumer gracefully" }
