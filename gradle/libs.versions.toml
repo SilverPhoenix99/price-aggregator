@@ -5,6 +5,7 @@ ktor = "3.2.0"
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+liquibase = { id = "org.liquibase.gradle", version = "3.0.2" }
 spring-boot = { id = "org.springframework.boot", version = "3.5.3" }
 spring-dependency-management = { id = "io.spring.dependency-management", version = "1.1.7" }
 
@@ -16,6 +17,10 @@ kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktor" }
 ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktor" }
 ktor-serialization-jackson = { module = "io.ktor:ktor-serialization-jackson", version.ref = "ktor" }
+liquibase-core = { module = "org.liquibase:liquibase-core", version = "4.32.0" }
+picocli = { module = "info.picocli:picocli", version = "4.7.7" }
+postgresql = { module = "org.postgresql:postgresql" }
+spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
 spring-boot-starter-tomcat = { module = "org.springframework.boot:spring-boot-starter-tomcat" }
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
 spring-boot-starter-websocket = { module = "org.springframework.boot:spring-boot-starter-websocket" }
@@ -34,9 +39,17 @@ runtime = [
     "ktor-client-java",
     "ktor-client-websockets",
     "ktor-serialization-jackson",
+    "postgresql",
+    "spring-boot-starter-data-jpa",
     "spring-boot-starter-tomcat",
     "spring-boot-starter-web",
     "spring-boot-starter-websocket",
+]
+
+liquibase = [
+    "liquibase-core",
+    "picocli",
+    "postgresql",
 ]
 
 test = [

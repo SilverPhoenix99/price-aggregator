@@ -1,11 +1,21 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath(libs.liquibase.core)
+    }
+}
+
 plugins {
     id("idea")
     id("application")
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.spring)
+    alias(libs.plugins.liquibase)
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
 }
@@ -29,7 +39,7 @@ tasks.withType<KotlinCompile> {
 
 dependencies {
     implementation(libs.bundles.runtime)
-
+    liquibaseRuntime(libs.bundles.liquibase)
     testImplementation(libs.bundles.test)
 }
 
@@ -39,4 +49,17 @@ application {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+liquibase {
+    activities.register("main") {
+        arguments = mapOf(
+            "changelogFile" to "src/main/resources/db/changelog.xml",
+            "url" to "jdbc:postgresql://127.0.0.2:15432/price-aggregator",
+            "schema" to "public",
+            "driver" to "org.postgresql.Driver",
+            "username" to "postgres",
+            "password" to "postgres",
+        )
+    }
 }

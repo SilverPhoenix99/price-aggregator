@@ -10,7 +10,11 @@ The project was built with
     ```sh
     docker compose up --detach
     ```
-2. Either:
+2. Initialize the Database
+    ```sh
+    ./gradlew update
+    ```
+3. Either:
    1. Run it from IntelliJ: see `.idea/runConfigurations/Main.xml`
    2. Or build the application, and run it from the terminal:
     ```sh
@@ -27,6 +31,8 @@ The project was built with
 * The requirements specify the 3 symbols to collect, so I implemented a websocket consumer that subscribes to only those symbols, to avoid consuming every symbol, just to discard most of them.
 * Used `Jackson` instead of `kotlinx`.
 * Even though we know the 3 tickets to consume, I've gone with the assumption that the Markets API is needed to retrieve extra information about those tickers, instead of hard-coding them in the application's configuration.
+* Because the requirements don't mention precisions for columns, I've decided to not include them to keep it simple, and continue with the project.
+* I didn't include a generated primary key, preferring to use the market's currencies, again for simplicity. In a real-world scenario, I'd use UUID (v4 or v7), or any other method outside the DB, so that DB ids don't become the bottleneck, in case of concurrent inserts. Understandable, at the moment, it's not very ergonomic having to do `where (base_currency, quote_currency) = (...)`.
 
 # Things learned
 * A much cleaner version of the `main` function: although it's possible to move it inside a class, it's much simpler to have it as a top-level function in Kotlin.
