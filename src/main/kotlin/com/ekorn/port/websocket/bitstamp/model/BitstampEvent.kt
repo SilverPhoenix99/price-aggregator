@@ -1,4 +1,4 @@
-package com.ekorn.port.websocket.model
+package com.ekorn.port.websocket.bitstamp.model
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type
@@ -9,12 +9,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
     include = JsonTypeInfo.As.PROPERTY,
     property = "event",
     visible = true,
-    defaultImpl = UnknownEventResponse::class,
+    defaultImpl = UnknownBitstampEvent::class,
 )
 @JsonSubTypes(
-    Type(SubscriptionSucceededResponse::class, name = "bts:subscription_succeeded"),
-    Type(TradeEventResponse::class, name = "trade"),
+    Type(SubscriptionSucceeded::class, name = "bts:subscription_succeeded"),
+    Type(TradeEvent::class, name = "trade"),
 )
-sealed class EventResponse(
+sealed class BitstampEvent(
     open val event: String
 )

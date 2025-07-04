@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 @ConfigurationPropertiesScan
 @EnableConfigurationProperties
-@ComponentScan("com.ekorn.port")
+@ComponentScan("com.ekorn.business", "com.ekorn.port")
 class ApplicationConfiguration
 
 @ConfigurationProperties("app")

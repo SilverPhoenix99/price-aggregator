@@ -1,15 +1,14 @@
-package com.ekorn.port.websocket
+package com.ekorn.port.websocket.bitstamp
 
 import com.ekorn.configuration.AppProperties
-import com.ekorn.port.websocket.builder.SubscribeRequestBuilder
-import com.ekorn.port.websocket.model.EventResponse
+import com.ekorn.port.websocket.bitstamp.builder.SubscribeRequestBuilder
+import com.ekorn.port.websocket.bitstamp.model.BitstampEvent
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
 import io.ktor.client.plugins.websocket.receiveDeserialized
 import io.ktor.client.plugins.websocket.sendSerialized
 import io.ktor.client.plugins.websocket.webSocketSession
-import jakarta.annotation.PostConstruct
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -19,52 +18,58 @@ import kotlinx.coroutines.selects.select
 import org.springframework.stereotype.Component
 import java.util.concurrent.CancellationException
 
+/**
+ * Manages the lifecycle of a WebSocket client connection to the Bitstamp API.
+ */
 @Component
 class WebSocketClient(
     private val client: HttpClient,
     private val app: AppProperties,
-    private val subscribeRequestBuilder: SubscribeRequestBuilder,
-    private val webSocketScope: CoroutineScope
+    private val webSocketScope: CoroutineScope,
+    private val subscribeRequestBuilder: SubscribeRequestBuilder
 ) {
     private val logger = KotlinLogging.logger {}
 
-    @PostConstruct
-    fun start() = webSocketScope.launch {
+    fun start(
+        markets: List<String>,
+        consume: suspend (BitstampEvent) -> Unit = {},
+    ) = webSocketScope.launch {
         while(true) {
             val session = client.webSocketSession(urlString = app.websocket.url)
             logger.info { "Connected WebSocket to ${app.websocket.url}"}
 
-            sendMarkets(session)
+            val consumer = webSocketScope.launch {
 
-            val consumer = webSocketScope.launch { consume(session) }
+                subscribe(session, markets)
+
+                while (true) {
+                    try {
+                        val message = session.receiveDeserialized<BitstampEvent>()
+                        consume(message)
+                    } catch (_: CancellationException) {
+                        logger.info { "Shutting down WebSocket consumer gracefully" }
+                        break
+                    } catch (e: Exception) {
+                        logger.error(e) { "Error occurred while consuming a WebSocket message" }
+                    }
+                }
+            }
 
             waitDisconnect(session, consumer)
         }
     }
 
-    suspend fun sendMarkets(session: DefaultClientWebSocketSession) {
+    suspend fun subscribe(
+        session: DefaultClientWebSocketSession,
+        markets: List<String>
+    ) {
+        logger.info { "Sending market subscriptions: $markets" }
 
-        logger.info { "Sending market subscriptions: ${app.markets}" }
+        val subscriptions = markets.map { market -> "live_trades_$market" }
+            .map { channel -> subscribeRequestBuilder.build(channel) }
 
-        val markets = app.markets
-            .map { market -> subscribeRequestBuilder.build(market) }
-
-        for (market in markets) {
-            session.sendSerialized(market)
-        }
-    }
-
-    suspend fun consume(session: DefaultClientWebSocketSession) {
-        while (true) {
-            try {
-                val message = session.receiveDeserialized<EventResponse>()
-                logger.info { "Received event: $message" }
-            } catch (_: CancellationException) {
-                logger.info { "Shutting down WebSocket consumer gracefully" }
-                return
-            } catch (e: Exception) {
-                logger.error(e) { "Error occurred while consuming a WebSocket message" }
-            }
+        for (subscription in subscriptions) {
+            session.sendSerialized(subscription)
         }
     }
 

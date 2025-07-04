@@ -1,16 +1,16 @@
-package com.ekorn.port.websocket.model
+package com.ekorn.port.websocket.bitstamp.model
 
-import com.ekorn.port.websocket.MicrotimestampDeserializer
+import com.ekorn.port.websocket.bitstamp.MicrotimestampDeserializer
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.math.BigDecimal
 import java.time.Instant
 
-data class TradeEventResponse(
+data class TradeEvent(
     override val event: String,
     val channel: String,
     val data: TradeEventData,
-): EventResponse(event)
+): BitstampEvent(event)
 
 data class TradeEventData(
     @param:JsonProperty("price_str")
