@@ -26,6 +26,7 @@ The project was built with
 * Even though it's considered bad practice, I've decided to include some files under `.idea`, that I believe can help set up the IDE.
 * The requirements specify the 3 symbols to collect, so I implemented a websocket consumer that subscribes to only those symbols, to avoid consuming every symbol, just to discard most of them.
 * Used `Jackson` instead of `kotlinx`.
+* Even though we know the 3 tickets to consume, I've gone with the assumption that the Markets API is needed to retrieve extra information about those tickers, instead of hard-coding them in the application's configuration.
 
 # Things learned
 * A much cleaner version of the `main` function: although it's possible to move it inside a class, it's much simpler to have it as a top-level function in Kotlin.
