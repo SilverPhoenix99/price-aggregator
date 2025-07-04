@@ -1,0 +1,10 @@
+app:
+  markets:
+    - base: BTC
+      quote: USD
+    - base: ETH
+      quote: USD
+    - base: ETH
+      quote: BTC
+  websocket:
+    url: wss://ws.bitstamp.net/

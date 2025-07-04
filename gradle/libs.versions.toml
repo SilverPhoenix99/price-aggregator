@@ -1,5 +1,6 @@
 [versions]
 kotlin = "2.2.0"
+ktor = "3.2.0"
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -9,8 +10,15 @@ spring-dependency-management = { id = "io.spring.dependency-management", version
 
 [libraries]
 # Runtime dependencies
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
+kotlin-logging-jvm = { module = "io.github.oshai:kotlin-logging-jvm", version = "7.0.7" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktor" }
+ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktor" }
+ktor-serialization-jackson = { module = "io.ktor:ktor-serialization-jackson", version.ref = "ktor" }
 spring-boot-starter-tomcat = { module = "org.springframework.boot:spring-boot-starter-tomcat" }
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-websocket = { module = "org.springframework.boot:spring-boot-starter-websocket" }
 
 # Test dependencies
 assertj = { module = "org.assertj:assertj-core" }
@@ -20,8 +28,15 @@ spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-star
 
 [bundles]
 runtime = [
+    "jackson-module-kotlin",
+    "kotlin-logging-jvm",
+    "kotlin-reflect",
+    "ktor-client-java",
+    "ktor-client-websockets",
+    "ktor-serialization-jackson",
     "spring-boot-starter-tomcat",
     "spring-boot-starter-web",
+    "spring-boot-starter-websocket",
 ]
 
 test = [
