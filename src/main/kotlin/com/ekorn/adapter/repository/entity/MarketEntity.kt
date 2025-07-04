@@ -1,4 +1,4 @@
-package com.ekorn.port.repository.entity
+package com.ekorn.adapter.repository.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable

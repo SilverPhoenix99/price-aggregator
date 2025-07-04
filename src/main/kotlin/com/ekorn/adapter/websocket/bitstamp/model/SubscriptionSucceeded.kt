@@ -1,4 +1,4 @@
-package com.ekorn.port.websocket.bitstamp.model
+package com.ekorn.adapter.websocket.bitstamp.model
 
 data class SubscriptionSucceeded(
     override val event: String,

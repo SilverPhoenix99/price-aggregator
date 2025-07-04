@@ -1,4 +1,4 @@
-package com.ekorn.port.websocket.bitstamp
+package com.ekorn.adapter.websocket.bitstamp
 
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext

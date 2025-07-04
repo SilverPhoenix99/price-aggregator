@@ -1,6 +1,6 @@
-package com.ekorn.port.websocket.bitstamp.model
+package com.ekorn.adapter.websocket.bitstamp.model
 
-import com.ekorn.port.websocket.bitstamp.MicrotimestampDeserializer
+import com.ekorn.adapter.websocket.bitstamp.MicrotimestampDeserializer
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.math.BigDecimal

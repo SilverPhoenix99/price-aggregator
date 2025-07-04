@@ -1,8 +1,8 @@
-package com.ekorn.port.websocket.bitstamp
+package com.ekorn.adapter.websocket.bitstamp
 
+import com.ekorn.adapter.websocket.bitstamp.builder.SubscribeRequestBuilder
+import com.ekorn.adapter.websocket.bitstamp.model.BitstampEvent
 import com.ekorn.configuration.AppProperties
-import com.ekorn.port.websocket.bitstamp.builder.SubscribeRequestBuilder
-import com.ekorn.port.websocket.bitstamp.model.BitstampEvent
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession

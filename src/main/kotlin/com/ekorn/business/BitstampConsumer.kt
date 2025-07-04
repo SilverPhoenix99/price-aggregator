@@ -1,9 +1,9 @@
 package com.ekorn.business
 
+import com.ekorn.adapter.websocket.bitstamp.WebSocketClient
+import com.ekorn.adapter.websocket.bitstamp.model.BitstampEvent
 import com.ekorn.business.mapper.toMarketString
 import com.ekorn.configuration.AppProperties
-import com.ekorn.port.websocket.bitstamp.WebSocketClient
-import com.ekorn.port.websocket.bitstamp.model.BitstampEvent
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Component

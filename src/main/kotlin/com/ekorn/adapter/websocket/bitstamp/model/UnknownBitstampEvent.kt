@@ -1,4 +1,4 @@
-package com.ekorn.port.websocket.bitstamp.model
+package com.ekorn.adapter.websocket.bitstamp.model
 
 import com.fasterxml.jackson.databind.JsonNode
 

@@ -1,6 +1,6 @@
-package com.ekorn.port.repository
+package com.ekorn.adapter.repository
 
-import com.ekorn.port.repository.entity.MarketEntity
+import com.ekorn.adapter.repository.entity.MarketEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.UUID
 
