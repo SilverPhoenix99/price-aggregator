@@ -13,9 +13,7 @@
             <column name="quote_currency" type="VARCHAR">
                 <constraints primaryKey="true" primaryKeyName="pk_markets" />
             </column>
-            <column name="base_decimals" type="INT">
-                <constraints nullable="false" />
-            </column>
+            <column name="symbol" type="VARCHAR_GENERATED_ALWAYS" />
             <column name="quote_decimals" type="INT">
                 <constraints nullable="false" />
             </column>
@@ -28,6 +26,18 @@
                 <constraints nullable="false" />
             </column>
         </createTable>
+        <modifySql>
+            <replace
+                replace="VARCHAR_GENERATED_ALWAYS"
+                with="VARCHAR GENERATED ALWAYS AS (lower(base_currency || quote_currency)) STORED"
+            />
+        </modifySql>
+    </changeSet>
+
+    <changeSet id="create-index-market_symbols" author="silverphoenix99">
+        <createIndex tableName="markets" indexName="idx_market_symbols">
+            <column name="symbol" />
+        </createIndex>
     </changeSet>
 
 </databaseChangeLog>
