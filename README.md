@@ -30,19 +30,21 @@ See the endpoints at `http-requests/rest-api.http`.
 It should be possible to run these from Intellij Ultimate. Regardless, I've provided equivalent `curl` commands in that file.
 
 # Key decisions
-* Some parts of the implementation were left to my interpretation. In a real-world scenario, I would have discussed them with the stakeholders. 
-* Even though it's a small project, I've decided to use a database to persist the exchange rates during reboots of the application. In a real-world scenario, multiple services might request a large amount of data, so it may not be possible to hold them all in memory.
-* In this case, I didn't use a cache, but it would be a perfectly valid scenario, in case queries become a bottleneck.
+* Some parts of the implementation were left to my interpretation. In a real-world scenario, I would have discussed them with the stakeholders.
+* Usually, I went with showing more about tech usage instead of simplifying the implementation, as a means to display my understanding of it. I'd cut some cruft in real-world projects.
+* Even though it's a small project, I've decided to use a database to persist the exchange rates during reboots of the application. It might have made sense in a real-word scenario, where there could be 100s of market symbols.
+* In this case, I didn't use a cache, but it would be a perfectly valid scenario, in case queries had become a bottleneck.
 * Another option in a CQRS and/or microservices architecture would be to push the events into Kafka, or any other persistent message broker, so downstream services can consume, and possibly filter, events they care about.
 * Even though it's considered bad practice, I've decided to include some files under `.idea`, that I believe can help set up the IDE.
 * The requirements specify the 3 symbols to collect, so I implemented a websocket consumer that subscribes to only those symbols, to avoid consuming every symbol, just to discard most of them.
-* Used `Jackson` instead of `kotlinx`, because it integrates better with Spring Boot.
+* I decided to denormalise the DB: even if they are 1:1, the markets are a different concept from prices. In the real-world, both markets and prices would have more information that could be incompatible between each other, i.e., with different lifecycles.
 * Even though we know the 3 tickers to consume, I've gone with the assumption that the Markets API is needed to retrieve extra information about those tickers, instead of hard-coding them in the application's configuration.
-* Because the requirements don't mention precisions for columns, I've decided to not include them to keep it simple, and continue with the project.
-* I didn't include a generated primary key, preferring to use the market's currencies, again for simplicity. In a real-world scenario, I'd use UUID (v4 or v7), or any other method outside the DB, so that DB ids don't become the bottleneck, in case of concurrent inserts. At the moment, uUnderstandably, it's not very ergonomic having to do `where (base_currency, quote_currency) = (...)`.
-* I didn't do TDD. Admittedly, I don't usually do TDD, but despite that, being a new project, it's difficult to see the direction changes will take, and I would spend a lot of time rewriting unit tests. I prefer the hollow method approach: I delete the content of the method and write the unit tests, then revert the method to its original state, and check that the tests pass.
+* Used `Jackson` instead of `kotlinx`, because it integrates better with Spring Boot.
+* Because the requirements don't mention precisions for columns, I've decided to not include them to keep it simple, to progress with the project.
+* I generate the market's primary key based on the `base_currency` and `quote_currency`, but in a real-world scenario, it might make sense to create a non-deterministic key, such as a UUID. Regardless, prices would still need to be referenced by the market's ticker symbol (like `btcusd`), because that's the information that comes from the WebSocket, or the project might have used some mapping between the currencies tuple and the symbol (in DB or memory).
 * I thought about initialising the prices by calling `GET /api/v2/ticker/{market_symbol}/`, but decided against it. `ETH/BTC` is slow to update, so it served as a Not Found test case.
 * Note that `PriceController` is still thin: mappings are done in the controller, since the business/domain layer shouldn't need to know how to parse or construct API specific models. The logic is still done by the `PriceService`, even if that only means getting the price from the DB.
+* I didn't do TDD. Admittedly, I don't usually do TDD, but despite that, being a new project, it's difficult to see the direction changes will take, and I would spend a lot of time rewriting unit tests. I prefer the hollow method approach: I delete the content of the method and write the unit tests, then revert the method to its original state, and check that the tests pass.
 
 # Things learned
 * A much cleaner version of the `main` function: although it's possible to move it inside a class, it's much simpler to have it as a top-level function in Kotlin.
