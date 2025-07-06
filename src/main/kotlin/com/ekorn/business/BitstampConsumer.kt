@@ -2,6 +2,8 @@ package com.ekorn.business
 
 import com.ekorn.adapter.websocket.bitstamp.WebSocketClient
 import com.ekorn.adapter.websocket.bitstamp.model.BitstampEvent
+import com.ekorn.adapter.websocket.bitstamp.model.SubscriptionSucceeded
+import com.ekorn.adapter.websocket.bitstamp.model.TradeEvent
 import com.ekorn.business.extension.marketSymbol
 import com.ekorn.configuration.AppProperties
 import com.ekorn.configuration.MarketKeyProperty
@@ -15,7 +17,8 @@ import org.springframework.stereotype.Component
 @Component
 class BitstampConsumer(
     private val app: AppProperties,
-    private val webSocketClient: WebSocketClient
+    private val webSocketClient: WebSocketClient,
+    private val marketService: MarketService,
 ) {
     private val logger = KotlinLogging.logger {}
 
@@ -31,6 +34,17 @@ class BitstampConsumer(
     }
 
     suspend fun consume(event: BitstampEvent) {
-        logger.info { "Received event: $event" }
+        when (event) {
+            is TradeEvent -> {
+                logger.info { "Received trade event: $event" }
+                marketService.updatePrice(event.marketSymbol, event.data.price, event.data.timestamp)
+            }
+            is SubscriptionSucceeded -> {
+                logger.info { "Successfully subscribed to channel ${event.channel}" }
+            }
+            else -> {
+                logger.info { "Unknown event type: $event" }
+            }
+        }
     }
 }

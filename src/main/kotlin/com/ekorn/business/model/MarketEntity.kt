@@ -14,9 +14,6 @@ open class MarketEntity(
     @field:EmbeddedId
     open var key: MarketKey,
 
-    @field:Column(nullable = false)
-    open var quoteDecimals: Int,
-
     @field:Column
     open var price: BigDecimal? = null,
 
@@ -31,17 +28,10 @@ open class MarketEntity(
     @field:Column(nullable = false)
     open var updatedAt: Instant? = null,
 ) {
-    constructor() : this(
-        key = MarketKey(),
-        quoteDecimals = 0
-    )
+    constructor() : this(MarketKey())
 
     val symbol: String
         get() = key.symbol
-
-    fun rescalePrice(newDecimals: Int) {
-        price = price?.movePointRight(newDecimals - quoteDecimals)
-    }
 }
 
 @Embeddable

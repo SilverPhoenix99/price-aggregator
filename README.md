@@ -33,6 +33,7 @@ The project was built with
 * Even though we know the 3 tickers to consume, I've gone with the assumption that the Markets API is needed to retrieve extra information about those tickers, instead of hard-coding them in the application's configuration.
 * Because the requirements don't mention precisions for columns, I've decided to not include them to keep it simple, and continue with the project.
 * I didn't include a generated primary key, preferring to use the market's currencies, again for simplicity. In a real-world scenario, I'd use UUID (v4 or v7), or any other method outside the DB, so that DB ids don't become the bottleneck, in case of concurrent inserts. At the moment, uUnderstandably, it's not very ergonomic having to do `where (base_currency, quote_currency) = (...)`.
+* I didn't do TDD. Admittedly, I don't usually do TDD, but despite that, being a new project, it's difficult to see the direction changes will take, and I would spend a lot of time rewriting unit tests. I prefer the hollow method approach: I delete the content of the method and write the unit tests, then revert the method to its original state, and check that the tests pass.
 
 # Things learned
 * A much cleaner version of the `main` function: although it's possible to move it inside a class, it's much simpler to have it as a top-level function in Kotlin.

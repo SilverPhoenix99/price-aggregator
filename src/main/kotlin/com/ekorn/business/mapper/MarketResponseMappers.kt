@@ -9,7 +9,6 @@ fun MarketResponse.toDomain(): MarketEntity {
         key = MarketKey(
             baseCurrency = baseCurrency,
             quoteCurrency = quoteCurrency,
-        ),
-        quoteDecimals = quoteDecimals,
+        )
     )
 }
