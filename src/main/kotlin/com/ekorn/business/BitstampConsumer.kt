@@ -2,8 +2,9 @@ package com.ekorn.business
 
 import com.ekorn.adapter.websocket.bitstamp.WebSocketClient
 import com.ekorn.adapter.websocket.bitstamp.model.BitstampEvent
-import com.ekorn.business.mapper.toMarketString
+import com.ekorn.business.extension.marketSymbol
 import com.ekorn.configuration.AppProperties
+import com.ekorn.configuration.MarketKeyProperty
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Component
@@ -20,14 +21,13 @@ class BitstampConsumer(
 
     @PostConstruct
     fun start() {
-        val markets = buildMarkets()
-        webSocketClient.start(markets, this::consume)
-    }
-
-    fun buildMarkets(): List<String> {
 
         logger.info { "Market subscriptions: ${app.markets}" }
-        return app.markets.map { prop -> prop.toMarketString() }
+
+        val marketSymbols = app.markets
+            .map(MarketKeyProperty::marketSymbol)
+
+        webSocketClient.start(marketSymbols, this::consume)
     }
 
     suspend fun consume(event: BitstampEvent) {

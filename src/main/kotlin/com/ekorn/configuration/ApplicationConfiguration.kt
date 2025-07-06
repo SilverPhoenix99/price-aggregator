@@ -1,25 +1,18 @@
 package com.ekorn.configuration
 
-import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.cloud.openfeign.EnableFeignClients
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
+import org.springframework.retry.annotation.EnableRetry
+import org.springframework.transaction.annotation.EnableTransactionManagement
 
 @Configuration
+@ComponentScan("com.ekorn.business", "com.ekorn.adapter")
 @ConfigurationPropertiesScan
 @EnableConfigurationProperties
-@ComponentScan("com.ekorn.business", "com.ekorn.adapter")
+@EnableFeignClients("com.ekorn.adapter.downstream")
+@EnableRetry
+@EnableTransactionManagement
 class ApplicationConfiguration
-
-@ConfigurationProperties("app")
-data class AppProperties(
-    val markets: List<MarketProperty>,
-    val websocket: WebSocketProperties
-) {
-    data class WebSocketProperties(
-        val url: String
-    )
-
-    data class MarketProperty(val base: String, val quote: String)
-}

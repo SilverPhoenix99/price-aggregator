@@ -37,6 +37,12 @@ tasks.withType<KotlinCompile> {
     }
 }
 
+dependencyManagement {
+    imports {
+        mavenBom(libs.spring.cloud.dependencies.get().toString())
+    }
+}
+
 dependencies {
     implementation(libs.bundles.runtime)
     liquibaseRuntime(libs.bundles.liquibase)

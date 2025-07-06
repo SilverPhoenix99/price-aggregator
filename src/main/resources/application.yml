@@ -1,10 +1,20 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://127.0.0.2:15432/price-aggregator
+    username: postgres
+    password: postgres
+
 app:
+  downstream:
+    bitstamp-markets:
+      url: https://www.bitstamp.net
   markets:
-    - base: BTC
-      quote: USD
-    - base: ETH
-      quote: USD
-    - base: ETH
-      quote: BTC
+    - base-currency: BTC
+      quote-currency: USD
+    - base-currency: ETH
+      quote-currency: USD
+    - base-currency: ETH
+      quote-currency: BTC
   websocket:
     url: wss://ws.bitstamp.net/
