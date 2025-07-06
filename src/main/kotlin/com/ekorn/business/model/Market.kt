@@ -4,21 +4,15 @@ import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
 import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
+import jakarta.persistence.Transient
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
-import java.math.BigDecimal
 import java.time.Instant
 
 @Entity(name = "markets")
-open class MarketEntity(
+open class Market(
     @field:EmbeddedId
     open var key: MarketKey,
-
-    @field:Column
-    open var price: BigDecimal? = null,
-
-    @field:Column
-    open var eventTimestamp: Instant? = null,
 
     @field:CreationTimestamp
     @field:Column(updatable = false, nullable = false)
@@ -29,18 +23,15 @@ open class MarketEntity(
     open var updatedAt: Instant? = null,
 ) {
     constructor() : this(MarketKey())
-
-    val symbol: String
-        get() = key.symbol
 }
 
 @Embeddable
 open class MarketKey(
 
-    @field:Column(nullable = false)
+    @field:Column(nullable = false, updatable = false)
     open var baseCurrency: String,
 
-    @field:Column(nullable = false)
+    @field:Column(nullable = false, updatable = false)
     open var quoteCurrency: String,
 ) {
     constructor() : this(
@@ -49,5 +40,6 @@ open class MarketKey(
     )
 
     val symbol: String
+        @Transient
         get() = "${baseCurrency}${quoteCurrency}".lowercase()
 }

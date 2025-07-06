@@ -28,7 +28,9 @@ class WebSocketClient(
     private val webSocketScope: CoroutineScope,
     private val subscribeRequestBuilder: SubscribeRequestBuilder
 ) {
-    private val logger = KotlinLogging.logger {}
+    companion object {
+        private val logger = KotlinLogging.logger {}
+    }
 
     fun start(
         markets: List<String>,

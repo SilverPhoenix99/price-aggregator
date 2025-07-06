@@ -18,9 +18,11 @@ import org.springframework.stereotype.Component
 class BitstampConsumer(
     private val app: AppProperties,
     private val webSocketClient: WebSocketClient,
-    private val marketService: MarketService,
+    private val priceService: PriceService,
 ) {
-    private val logger = KotlinLogging.logger {}
+    companion object {
+        private val logger = KotlinLogging.logger {}
+    }
 
     @PostConstruct
     fun start() {
@@ -37,7 +39,7 @@ class BitstampConsumer(
         when (event) {
             is TradeEvent -> {
                 logger.info { "Received trade event: $event" }
-                marketService.updatePrice(event.marketSymbol, event.data.price, event.data.timestamp)
+                priceService.updatePrice(event.marketSymbol, event.data.price, event.data.timestamp)
             }
             is SubscriptionSucceeded -> {
                 logger.info { "Successfully subscribed to channel ${event.channel}" }
