@@ -1,24 +1,25 @@
-WEBSOCKET wss://ws.bitstamp.net/
-Content-Type: application/json
-
-{
-  "event":"bts:subscribe",
-  "data": {
-    "channel":"live_trades_ethbtc"
-  }
-}
-
-###
-
-GET https://www.bitstamp.net/api/v2/markets/
+# curl -i http://localhost:8080/prices/BTC-USD
+GET http://localhost:8080/prices/BTC-USD
 Accept: application/json
 
 ###
 
-GET https://www.bitstamp.net/api/v2/ticker/
+# curl -i http://localhost:8080/prices/ETH-USD
+GET http://localhost:8080/prices/ETH-USD
 Accept: application/json
 
 ###
 
-GET https://www.bitstamp.net/api/v2/ticker/ethbtc/
+# curl -i http://localhost:8080/prices/ETH-BTC
+GET http://localhost:8080/prices/ETH-BTC
 Accept: application/json
+
+###
+
+# This request always returns 404. This symbol was not configured.
+
+# curl -i http://localhost:8080/prices/BTC-USD
+GET http://localhost:8080/prices/BTC-ETH
+Accept: application/json
+
+###

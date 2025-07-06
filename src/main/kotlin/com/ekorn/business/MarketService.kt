@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class MarketService(
-    private val marketRepository: MarketRepository,
+    private val repository: MarketRepository,
     private val marketsClient: BitstampMarketsClient,
     private val app: AppProperties,
 ) {
@@ -24,7 +24,7 @@ class MarketService(
 
         // It's expected to be a small number of entities.
         // Even 200 is considered a small amount to hold in memory.
-        val entities = marketRepository.findAll()
+        val entities = repository.findAll()
             .associateBy { market -> market.key.symbol }
 
         val configuredMarketSymbols = app.markets
@@ -49,8 +49,8 @@ class MarketService(
                 }
             }
 
-        marketRepository.saveAll(markets)
+        repository.saveAll(markets)
     }
 
-    fun findBySymbol(symbol: String) = marketRepository.findBySymbol(symbol)
+    fun findBySymbol(symbol: String) = repository.findBySymbol(symbol)
 }

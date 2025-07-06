@@ -10,7 +10,7 @@ import java.time.Instant
 
 @Service
 class PriceService(
-    private val priceRepository: PriceRepository,
+    private val repository: PriceRepository,
     private val marketService: MarketService
 ) {
     companion object {
@@ -38,6 +38,10 @@ class PriceService(
         logger.info { "Updating price for market: symbol=$symbol, price=$price" }
 
         val price = Price(symbol, price, eventTimestamp)
-        priceRepository.save(price)
+        repository.save(price)
+    }
+
+    fun findPrice(marketSymbol: String): Price? {
+        return repository.findById(marketSymbol).orElse(null)
     }
 }
