@@ -29,6 +29,16 @@ See the endpoints at `http-requests/rest-api.http`.
 
 It should be possible to run these from Intellij Ultimate. Regardless, I've provided equivalent `curl` commands in that file.
 
+# Project structure
+
+* `adapter`: Contains the implementations of the ports.
+  * `controller`: HTTP server APIs.
+  * `downstream`: HTTP client APIs.
+  * `repository`: JPA interfaces for persisting data and querying the DB.
+  * `websocket`: WebSocket client.
+* `business`: AKA, domain layer. Contains the business logic.
+* `configuration`: Contains Spring Boot's configuration.
+
 # Key decisions
 * Some parts of the implementation were left to my interpretation. In a real-world scenario, I would have discussed them with the stakeholders.
 * Usually, I went with showing more about tech usage instead of simplifying the implementation, as a means to display my understanding of it. I'd cut some cruft in real-world projects.
