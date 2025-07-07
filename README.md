@@ -54,3 +54,8 @@ It should be possible to run these from Intellij Ultimate. Regardless, I've prov
 * Initially, I thought `suspend` would be the same as `async`, but it turns out that `suspend` is the opposite, because it marks the function as blocking.
 * `select` is quite useful for multiple conditions coming from different coroutines, although it seems to still be marked as experimental.
 * `actual`/`expect`: it seems that Kotlin has a way to specify a contract on how to implement interfaces (`expect`/common code), which might have a platform specific implementations (`actual`).
+
+# Scaling the service
+In terms of scaling for different exchanges, it might be better to split this service into separate services:
+* One service per exchange, that pushes messages to a Kafka topic: this makes development independent between exchanges, and possibly parallel, but it might be more difficult to maintain;
+* One service that aggregates and provides all the exchange prices: this might still be a point of failure, so it might make sense to create topic partitions in Kafka.
