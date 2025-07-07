@@ -52,12 +52,17 @@ It should be possible to run these from Intellij Ultimate. Regardless, I've prov
 * Used `Jackson` instead of `kotlinx`, because it integrates better with Spring Boot.
 * Because the requirements don't mention precisions for columns, I've decided to not include them to keep it simple, to progress with the project.
 * I generate the market's primary key based on the `base_currency` and `quote_currency`, but in a real-world scenario, it might make sense to create a non-deterministic key, such as a UUID. Regardless, prices would still need to be referenced by the market's ticker symbol (like `btcusd`), because that's the information that comes from the WebSocket, or the project might have used some mapping between the currencies tuple and the symbol (in DB or memory).
+* I could have used the `market_symbol` that's present in Bitstamp's Market API and save that in the DB column, but I decided to assume it would be the concatenation of `base_currency` and `quote_currency`.
 * I thought about initialising the prices by calling `GET /api/v2/ticker/{market_symbol}/`, but decided against it. `ETH/BTC` is slow to update, so it served as a Not Found test case.
 * Note that `PriceController` is still thin: mappings are done in the controller, since the business/domain layer shouldn't need to know how to parse or construct API specific models. The logic is still done by the `PriceService`, even if that only means getting the price from the DB.
 * I didn't do TDD. Admittedly, I don't usually do TDD, but despite that, being a new project, it's difficult to see the direction changes will take, and I would spend a lot of time rewriting unit tests. I prefer the hollow method approach: I delete the content of the method and write the unit tests, then revert the method to its original state, and check that the tests pass.
-* I could have used the `market_symbol` that's present in Bitstamp's Market API and save that in the DB column, but I decided to assume it would be the concatenation of `base_currency` and `quote_currency`.
 * I didn't create tests for `WebSocketClient`. I still need to learn how to test coroutines, and I prefer to work on it after delivering this project.
 * I didn't add all error handling for controllers for the sake of simplicity, only for 404 errors, as specified by the requirements.
+
+# Scaling the service
+In terms of scaling for different exchanges, it might be better to split this service into separate services:
+* One service per exchange, that pushes messages to a Kafka topic: this makes development independent between exchanges, and possibly parallel, but it might be more difficult to maintain;
+* One service that aggregates and provides all the exchange prices: this might still be a point of failure, so it might make sense to create topic partitions in Kafka.
 
 # Things learned
 * A much cleaner version of the `main` function: although it's possible to move it inside a class, it's much simpler to have it as a top-level function in Kotlin.
@@ -67,8 +72,3 @@ It should be possible to run these from Intellij Ultimate. Regardless, I've prov
 * `actual`/`expect`: it seems that Kotlin has a way to specify a contract on how to implement interfaces (`expect`/common code), which might have a platform specific implementations (`actual`).
 * `MockK` - I tried `Mockito` but it didn't work well with extension functions.
 * Apart from coroutines, there's a lot of similarity with Ruby, especially in terms of building DSLs.
-
-# Scaling the service
-In terms of scaling for different exchanges, it might be better to split this service into separate services:
-* One service per exchange, that pushes messages to a Kafka topic: this makes development independent between exchanges, and possibly parallel, but it might be more difficult to maintain;
-* One service that aggregates and provides all the exchange prices: this might still be a point of failure, so it might make sense to create topic partitions in Kafka.
