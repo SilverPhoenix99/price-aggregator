@@ -65,6 +65,8 @@ It should be possible to run these from Intellij Ultimate. Regardless, I've prov
 * Initially, I thought `suspend` would be the same as `async`, but it turns out that `suspend` is the opposite, because it marks the function as blocking.
 * `select` is quite useful for multiple conditions coming from different coroutines, although it seems to still be marked as experimental.
 * `actual`/`expect`: it seems that Kotlin has a way to specify a contract on how to implement interfaces (`expect`/common code), which might have a platform specific implementations (`actual`).
+* `MockK` - I tried `Mockito` but it didn't work well with extension functions.
+* Apart from coroutines, there's a lot of similarity with Ruby, especially in terms of building DSLs.
 
 # Scaling the service
 In terms of scaling for different exchanges, it might be better to split this service into separate services:
