@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import java.time.Instant
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeUnit.MICROSECONDS
 
 class MicrotimestampDeserializer : JsonDeserializer<Instant>() {
 
@@ -18,9 +18,10 @@ class MicrotimestampDeserializer : JsonDeserializer<Instant>() {
             return null
         }
 
-        // The last 3 digits are always 0, so we can ignore them
+        // The last 3 digits are always 0, so we can ignore them.
+        // This means the timestamp is actually truncated to milliseconds.
 
-        val milliseconds = TimeUnit.MICROSECONDS.toMillis(microseconds)
+        val milliseconds = MICROSECONDS.toMillis(microseconds)
         return Instant.ofEpochMilli(milliseconds)
     }
 }

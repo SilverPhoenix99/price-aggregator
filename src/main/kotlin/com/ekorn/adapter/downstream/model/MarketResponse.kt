@@ -7,8 +7,5 @@ data class MarketResponse(
     val baseCurrency: String,
 
     @field:JsonProperty("counter_currency")
-    val quoteCurrency: String,
-
-    @field:JsonProperty("counter_decimals")
-    val quoteDecimals: Int,
+    val quoteCurrency: String
 )

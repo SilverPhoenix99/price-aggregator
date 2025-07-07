@@ -5,6 +5,7 @@ import com.ekorn.adapter.websocket.bitstamp.model.BitstampEvent
 import com.ekorn.adapter.websocket.bitstamp.model.SubscriptionSucceeded
 import com.ekorn.adapter.websocket.bitstamp.model.TradeEvent
 import com.ekorn.business.extension.marketSymbol
+import com.ekorn.business.mapper.toPriceEntity
 import com.ekorn.configuration.AppProperties
 import com.ekorn.configuration.MarketKeyProperty
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -39,7 +40,8 @@ class BitstampConsumer(
         when (event) {
             is TradeEvent -> {
                 logger.info { "Received trade event: $event" }
-                priceService.updatePrice(event.marketSymbol, event.data.price, event.data.timestamp)
+                val price = event.toPriceEntity()
+                priceService.updatePrice(price)
             }
             is SubscriptionSucceeded -> {
                 logger.info { "Successfully subscribed to channel ${event.channel}" }

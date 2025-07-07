@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.NativeQuery
 interface MarketRepository : JpaRepository<Market, MarketKey> {
 
     // language=PostgreSQL
-    @NativeQuery("SELECT * FROM markets WHERE symbol = :symbol")
-    fun findBySymbol(symbol: String): Market?
+    @NativeQuery("SELECT count(*) = 1 FROM markets WHERE symbol = :symbol")
+    fun existsBySymbol(symbol: String): Boolean
 }

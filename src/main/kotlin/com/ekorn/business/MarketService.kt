@@ -22,6 +22,11 @@ class MarketService(
     @Transactional
     fun initialiseMarkets() {
 
+        if (app.markets.isEmpty()) {
+            // No markets configured, so nothing to do.
+            return
+        }
+
         // It's expected to be a small number of entities.
         // Even 200 is considered a small amount to hold in memory.
         val entities = repository.findAll()
@@ -49,8 +54,10 @@ class MarketService(
                 }
             }
 
-        repository.saveAll(markets)
+        if (markets.any()) {
+            repository.saveAll(markets)
+        }
     }
 
-    fun findBySymbol(symbol: String) = repository.findBySymbol(symbol)
+    fun existsBySymbol(symbol: String) = repository.existsBySymbol(symbol)
 }
