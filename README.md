@@ -57,6 +57,7 @@ It should be possible to run these from Intellij Ultimate. Regardless, I've prov
 * I didn't do TDD. Admittedly, I don't usually do TDD, but despite that, being a new project, it's difficult to see the direction changes will take, and I would spend a lot of time rewriting unit tests. I prefer the hollow method approach: I delete the content of the method and write the unit tests, then revert the method to its original state, and check that the tests pass.
 * I could have used the `market_symbol` that's present in Bitstamp's Market API and save that in the DB column, but I decided to assume it would be the concatenation of `base_currency` and `quote_currency`.
 * I didn't create tests for `WebSocketClient`. I still need to learn how to test coroutines, and I prefer to work on it after delivering this project.
+* I didn't add all error handling for controllers for the sake of simplicity, only for 404 errors, as specified by the requirements.
 
 # Things learned
 * A much cleaner version of the `main` function: although it's possible to move it inside a class, it's much simpler to have it as a top-level function in Kotlin.
